@@ -1,0 +1,13 @@
+[
+  {
+    "id": "f994ee43-682b-480b-a371-21b88ada5044",
+    "blogId": "e2d7b0ae-f6d2-4575-85d2-840b9b8d3f20",
+    "name": "dd",
+    "email": "dd",
+    "comment": "ddd",
+    "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=dd",
+    "likes": 5,
+    "approved": true,
+    "createdAt": "2026-02-23T13:24:17.115Z"
+  }
+]

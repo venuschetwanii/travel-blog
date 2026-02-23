@@ -1,0 +1,43 @@
+[
+  {
+    "id": "e2d7b0ae-f6d2-4575-85d2-840b9b8d3f20",
+    "title": "Sed fugit totam arc",
+    "slug": "sed-fugit-totam-arc",
+    "excerpt": "Quis facilis proident aliqua Et perferendis nulla alias consectetur accusamus porro est beatae minim dolor est praesentium aspernatur ut",
+    "content": "<p>Harum quia repudiand.</p>",
+    "image": "/uploads/1771504050055-dmduqthmgpe9.png",
+    "images": [
+      "/uploads/1771504050055-dmduqthmgpe9.png"
+    ],
+    "category": "Adventure",
+    "tags": [],
+    "author": "Admin",
+    "readTime": "1 min read",
+    "published": true,
+    "featured": false,
+    "views": 14,
+    "createdAt": "2026-02-19T12:27:30.065Z",
+    "updatedAt": "2026-02-23T13:24:23.032Z",
+    "seo": {
+      "metaTitle": "Sed fugit totam arc | TravelBlog",
+      "metaDescription": "Quis facilis proident aliqua Et perferendis nulla alias consectetur accusamus porro est beatae minim dolor est praesentium aspernatur ut",
+      "metaKeywords": "",
+      "ogTitle": "Sed fugit totam arc",
+      "ogDescription": "Quis facilis proident aliqua Et perferendis nulla alias consectetur accusamus porro est beatae minim dolor est praesentium aspernatur ut",
+      "ogImage": "/uploads/1771504050055-dmduqthmgpe9.png",
+      "canonicalUrl": "http://localhost:3000/blog/sed-fugit-totam-arc",
+      "structuredData": {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Sed fugit totam arc",
+        "image": "/uploads/1771504050055-dmduqthmgpe9.png",
+        "author": {
+          "@type": "Person",
+          "name": "Admin"
+        },
+        "datePublished": "2026-02-19T12:27:30.065Z",
+        "dateModified": "2026-02-19T12:27:30.065Z"
+      }
+    }
+  }
+]

@@ -1,0 +1,39 @@
+# dependencies
+node_modules/
+**/node_modules/
+
+# builds
+build/
+dist/
+coverage/
+
+# env
+.env
+.env.*
+!.env.example
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# runtime
+*.pid
+*.seed
+*.pid.lock
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# misc
+*.log
+
+# large local media
+frontend/public/videos/*.mp4
+frontend/public/videos/*.mov
+frontend/public/videos/*.webm
