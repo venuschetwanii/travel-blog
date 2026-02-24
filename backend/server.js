@@ -10,27 +10,30 @@ const faqsRouter = require('./routes/faqs');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
+const SITE_URL = process.env.SITE_URL || FRONTEND_URL;
+const BACKEND_URL = process.env.BACKEND_URL || `http://localhost:${PORT}`;
 
-app.use(cors({ origin: 'http://localhost:3000' }));
+app.use(cors({ origin: FRONTEND_URL }));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.get('/robots.txt', (_req, res) => {
   res.type('text/plain');
-  res.send('User-agent: *\nAllow: /\nSitemap: http://localhost:5000/sitemap.xml');
+  res.send(`User-agent: *\nAllow: /\nSitemap: ${BACKEND_URL}/sitemap.xml`);
 });
 
 app.get('/sitemap.xml', (_req, res) => {
   const blogs = readJson('blogs.json').filter((b) => b.published);
   const entries = blogs
-    .map((b) => `<url><loc>http://localhost:3000/blog/${b.slug}</loc><lastmod>${b.updatedAt || b.createdAt}</lastmod></url>`)
+    .map((b) => `<url><loc>${SITE_URL}/blog/${b.slug}</loc><lastmod>${b.updatedAt || b.createdAt}</lastmod></url>`)
     .join('');
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>http://localhost:3000/</loc></url>
-  <url><loc>http://localhost:3000/faq</loc></url>
+  <url><loc>${SITE_URL}/</loc></url>
+  <url><loc>${SITE_URL}/faq</loc></url>
   ${entries}
 </urlset>`;
 

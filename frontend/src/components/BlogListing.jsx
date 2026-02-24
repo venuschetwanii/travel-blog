@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { API_BASE } from '../api';
 
 const CATEGORIES = ['All', 'Asia', 'Europe', 'Adventure', 'Beach', 'Mountains', 'City'];
 
@@ -24,7 +25,7 @@ export default function BlogListing() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/blogs')
+    axios.get(`${API_BASE}/api/blogs`)
       .then((res) => {
         const data = res.data?.blogs || res.data?.data || res.data || [];
         const list = Array.isArray(data) ? data : [];
@@ -117,7 +118,7 @@ export default function BlogListing() {
                 >
                   <div className="bl-card-img-wrap">
                     <img
-                      src={heroCard.image ? `http://localhost:5000${heroCard.image}` : ((heroCard.images && heroCard.images[0]) ? `http://localhost:5000${heroCard.images[0]}` : '')}
+                      src={heroCard.image ? `${API_BASE}${heroCard.image}` : ((heroCard.images && heroCard.images[0]) ? `${API_BASE}${heroCard.images[0]}` : '')}
                       alt={heroCard.title}
                       className="bl-card-img"
                       onError={(e) => { e.currentTarget.style.display = 'none'; }}
@@ -152,7 +153,7 @@ export default function BlogListing() {
                     >
                       <div className="bl-card-sm-img-wrap">
                         <img
-                          src={blog.image ? `http://localhost:5000${blog.image}` : ((blog.images && blog.images[0]) ? `http://localhost:5000${blog.images[0]}` : '')}
+                          src={blog.image ? `${API_BASE}${blog.image}` : ((blog.images && blog.images[0]) ? `${API_BASE}${blog.images[0]}` : '')}
                           alt={blog.title}
                           className="bl-card-img"
                           onError={(e) => { e.currentTarget.style.display = 'none'; }}

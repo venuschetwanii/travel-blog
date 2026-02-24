@@ -1,5 +1,6 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { API_BASE } from '../../api';
 
 export default function BlogPreview() {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ export default function BlogPreview() {
     ? ''
     : cover.startsWith('blob:') || cover.startsWith('http')
       ? cover
-      : `http://localhost:5000${cover}`;
+      : `${API_BASE}${cover}`;
 
   if (!blog) return <main className="container"><p>No preview data found.</p></main>;
 

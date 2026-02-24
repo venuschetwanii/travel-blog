@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate, useParams } from 'react-router-dom';
 import api from '../api';
+import { API_BASE } from '../api';
 import CommentSection from '../components/CommentSection';
 import RelatedBlogs from '../components/RelatedBlogs';
 import BudgetRealitySlider from '../components/BudgetRealitySlider';
@@ -75,7 +76,7 @@ export default function BlogDetail() {
       <div className="read-progress" style={{ width: `${progress}%` }} />
 
       <section className="detail-hero editorial">
-        {cover ? <img src={`http://localhost:5000${cover}`} alt={blog.title} /> : <div className="image-fallback" />}
+        {cover ? <img src={`${API_BASE}${cover}`} alt={blog.title} /> : <div className="image-fallback" />}
       </section>
 
       <section className="container detail-header-card">

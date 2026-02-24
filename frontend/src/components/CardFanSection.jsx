@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import axios from 'axios';
+import { API_BASE } from '../api';
 
 const FALLBACK_CARDS = [
   { image: 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=600&q=80', destination: 'Jaipur, India', category: 'Asia', budget: '$12/day' },
@@ -18,12 +19,12 @@ export default function CardFanSection() {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.2 });
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/blogs?limit=5&published=true')
+    axios.get(`${API_BASE}/api/blogs?limit=5&published=true`)
       .then((res) => {
         const blogs = res.data?.blogs || res.data?.data || res.data || [];
         if (Array.isArray(blogs) && blogs.length >= 3) {
           const mapped = blogs.slice(0, 5).map((b, i) => ({
-            image: b?.image ? `http://localhost:5000${b.image}` : FALLBACK_CARDS[i % FALLBACK_CARDS.length].image,
+            image: b?.image ? `${API_BASE}${b.image}` : FALLBACK_CARDS[i % FALLBACK_CARDS.length].image,
             destination: b?.title || FALLBACK_CARDS[i % FALLBACK_CARDS.length].destination,
             category: b?.category || FALLBACK_CARDS[i % FALLBACK_CARDS.length].category,
             budget: (Array.isArray(b?.tags) && b.tags[0]) || 'Budget Travel',

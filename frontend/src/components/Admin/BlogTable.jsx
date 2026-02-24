@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { RiEyeLine, RiPencilLine, RiRefreshLine, RiSearchLine, RiDeleteBinLine } from 'react-icons/ri';
 import DeleteConfirm from './DeleteConfirm';
+import { API_BASE } from '../../api';
 
 const rowVariants = {
   hidden: { opacity: 0, y: 12 },
@@ -59,7 +60,7 @@ export default function BlogTable({ blogs, onEdit, onPreview, onToggle, onDelete
               transition={{ delay: idx * 0.04, duration: 0.35 }}
             >
               <div className="col thumb">
-                {cover ? <img src={`http://localhost:5000${cover}`} alt={b.title} /> : <div className="no-thumb" />}
+                {cover ? <img src={`${API_BASE}${cover}`} alt={b.title} /> : <div className="no-thumb" />}
               </div>
               <div className="col title" title={b.title}>{b.title}</div>
               <div className="col">

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import api from '../api';
+import api, { API_BASE } from '../api';
 import useDebounce from '../hooks/useDebounce';
 
 export default function SearchBar({
@@ -94,7 +94,7 @@ export default function SearchBar({
               const cover = (Array.isArray(item.images) && item.images[0]) || item.image;
               return (
                 <button key={item.id} type="button" className="search-result" onClick={() => selectResult(item)}>
-                  {cover ? <img src={`http://localhost:5000${cover}`} alt={item.title} /> : <span className="dot" />}
+                  {cover ? <img src={`${API_BASE}${cover}`} alt={item.title} /> : <span className="dot" />}
                   <div>
                     <strong>{item.title}</strong>
                     <small>{item.category}</small>

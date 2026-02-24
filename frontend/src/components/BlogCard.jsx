@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
+import { API_BASE } from '../api';
 
 function fmtViews(v = 0) {
   if (v >= 1000000) return `${(v / 1000000).toFixed(1)}M`;
@@ -15,7 +16,7 @@ export default function BlogCard({ blog, hero = false }) {
   return (
     <Link to={`/blog/${blog.slug}`} className={`blog-card ${hero ? 'hero' : 'standard'}`}>
       <div className="card-media">
-        {cover ? <img className="card-image" src={`http://localhost:5000${cover}`} alt={blog.title} /> : <div className="card-image image-fallback" />}
+        {cover ? <img className="card-image" src={`${API_BASE}${cover}`} alt={blog.title} /> : <div className="card-image image-fallback" />}
         <span className="category-badge">{blog.category}</span>
       </div>
       <div className="card-body">
