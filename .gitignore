@@ -33,7 +33,6 @@ Thumbs.db
 # misc
 *.log
 
-# large local media
-frontend/public/videos/*.mp4
-frontend/public/videos/*.mov
-frontend/public/videos/*.webm
+# videos (keep only landing background tracked)
+frontend/public/videos/*
+!frontend/public/videos/landing-bg.mp4

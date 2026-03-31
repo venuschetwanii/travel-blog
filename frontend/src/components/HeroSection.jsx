@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useMemo, useState } from 'react';
+import { useState } from 'react';
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 30 },
@@ -14,26 +14,8 @@ export default function HeroSection() {
   const navigate = useNavigate();
   const [query, setQuery] = useState('');
   const heroBg = 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2200&q=80';
-  const bgOptions = useMemo(() => ([
-    { id: 'image', label: 'Image' },
-    { id: 'video-1', label: 'Video 1', src: '/videos/hero-option-1.mp4' },
-    { id: 'video-2', label: 'Video 2', src: '/videos/hero-option-2.mp4' },
-    { id: 'video-3', label: 'Video 3', src: '/videos/hero-option-3.mp4' },
-    { id: 'video-4', label: 'Video 4', src: '/videos/hero-option-4.mp4' }
-  ]), []);
-  const [activeBg, setActiveBg] = useState(() => localStorage.getItem('hero-bg-choice') || 'image');
+  const heroVideo = '/videos/landing-bg.mp4';
   const [videoError, setVideoError] = useState(false);
-
-  useEffect(() => {
-    localStorage.setItem('hero-bg-choice', activeBg);
-  }, [activeBg]);
-
-  useEffect(() => {
-    setVideoError(false);
-  }, [activeBg]);
-
-  const selectedOption = bgOptions.find((opt) => opt.id === activeBg) || bgOptions[0];
-  const useVideo = Boolean(selectedOption.src) && !videoError;
 
   const goToListing = () => {
     const section = document.getElementById('all-blogs');
@@ -55,15 +37,16 @@ export default function HeroSection() {
   return (
     <section className="hero-section">
       <div className="hero-kb-wrap" aria-hidden="true">
-        {useVideo ? (
+        {!videoError ? (
           <video
             className="hero-kb-video"
-            src={selectedOption.src}
+            src={heroVideo}
             autoPlay
             muted
             loop
             playsInline
             preload="metadata"
+            poster={heroBg}
             onError={() => setVideoError(true)}
           />
         ) : (
@@ -75,19 +58,6 @@ export default function HeroSection() {
       </div>
 
       <div className="hero-content-container">
-        <div className="hero-bg-switcher" role="group" aria-label="Background preview options">
-          {bgOptions.map((opt) => (
-            <button
-              key={opt.id}
-              type="button"
-              className={opt.id === activeBg ? 'active' : ''}
-              onClick={() => setActiveBg(opt.id)}
-            >
-              {opt.label}
-            </button>
-          ))}
-        </div>
-
         <motion.h1 className="hero-headline" {...fadeUp(0.1)}>
           Discover the world
           <br />
