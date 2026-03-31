@@ -1175,6 +1175,12 @@ body:not(.admin-mode) .navbar-link {
   transition: color 0.25s ease, background 0.25s ease;
 }
 
+body:not(.admin-mode) .navbar-link-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
 body:not(.admin-mode) .navbar--hero .navbar-link { color: rgba(255, 255, 255, 0.8); }
 body:not(.admin-mode) .navbar--scrolled .navbar-link,
 body:not(.admin-mode) .navbar--page .navbar-link { color: var(--bark); }
@@ -1275,6 +1281,11 @@ body:not(.admin-mode) .navbar-cta {
     box-shadow 0.25s ease;
 }
 
+body:not(.admin-mode) .navbar-cta-btn {
+  border: none;
+  cursor: pointer;
+}
+
 body:not(.admin-mode) .navbar--hero .navbar-cta {
   color: rgba(255, 255, 255, 0.9);
   border: 1.5px solid rgba(255, 255, 255, 0.35);
@@ -1366,6 +1377,12 @@ body:not(.admin-mode) .mobile-link {
   text-decoration: none;
   padding: 10px 0;
   transition: color 0.2s ease;
+}
+
+body:not(.admin-mode) .mobile-link-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
 }
 
 body:not(.admin-mode) .mobile-link:hover {

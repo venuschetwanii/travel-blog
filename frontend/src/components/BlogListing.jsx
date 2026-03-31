@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_BASE } from '../api';
 
@@ -22,10 +22,12 @@ export default function BlogListing() {
   const [activeTab, setActiveTab] = useState('All');
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
 
   useEffect(() => {
-    axios.get(`${API_BASE}/api/blogs`)
+    axios
+      .get(`${API_BASE}/api/blogs`)
       .then((res) => {
         const data = res.data?.blogs || res.data?.data || res.data || [];
         const list = Array.isArray(data) ? data : [];
@@ -40,12 +42,19 @@ export default function BlogListing() {
     else setFiltered(blogs.filter((b) => b.category === activeTab));
   }, [activeTab, blogs]);
 
-  const getCategoryCount = (cat) => (
-    cat === 'All' ? blogs.length : blogs.filter((b) => b.category === cat).length
-  );
+  const getCategoryCount = (cat) => (cat === 'All' ? blogs.length : blogs.filter((b) => b.category === cat).length);
 
   const heroCard = filtered[0] || null;
   const gridCards = filtered.slice(1);
+
+  const handleViewAll = () => {
+    setActiveTab('All');
+    if (pathname === '/blogs') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+    navigate('/blogs');
+  };
 
   return (
     <section className="bl-section" ref={ref} id="all-blogs">
@@ -60,7 +69,7 @@ export default function BlogListing() {
               Latest <em>Dispatches</em>
             </h2>
           </div>
-          <button className="bl-view-all" onClick={() => navigate('/#all-blogs')} type="button">
+          <button className="bl-view-all" onClick={handleViewAll} type="button">
             View All <span>→</span>
           </button>
         </div>
@@ -83,14 +92,18 @@ export default function BlogListing() {
 
         {loading && (
           <div className="bl-loading">
-            {[...Array(3)].map((_, i) => <div key={i} className="bl-skeleton" />)}
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="bl-skeleton" />
+            ))}
           </div>
         )}
 
         {!loading && filtered.length === 0 && (
           <div className="bl-empty">
             <span className="bl-empty-icon">🗺️</span>
-            <p>No dispatches found for <strong>{activeTab}</strong> yet.</p>
+            <p>
+              No dispatches found for <strong>{activeTab}</strong> yet.
+            </p>
             <button onClick={() => setActiveTab('All')} type="button">
               See all guides →
             </button>
@@ -118,10 +131,18 @@ export default function BlogListing() {
                 >
                   <div className="bl-card-img-wrap">
                     <img
-                      src={heroCard.image ? `${API_BASE}${heroCard.image}` : ((heroCard.images && heroCard.images[0]) ? `${API_BASE}${heroCard.images[0]}` : '')}
+                      src={
+                        heroCard.image
+                          ? `${API_BASE}${heroCard.image}`
+                          : heroCard.images && heroCard.images[0]
+                            ? `${API_BASE}${heroCard.images[0]}`
+                            : ''
+                      }
                       alt={heroCard.title}
                       className="bl-card-img"
-                      onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                      }}
                     />
                     <CategoryBadge cat={heroCard.category} />
                     <div className="bl-card-img-overlay" />
@@ -153,10 +174,18 @@ export default function BlogListing() {
                     >
                       <div className="bl-card-sm-img-wrap">
                         <img
-                          src={blog.image ? `${API_BASE}${blog.image}` : ((blog.images && blog.images[0]) ? `${API_BASE}${blog.images[0]}` : '')}
+                          src={
+                            blog.image
+                              ? `${API_BASE}${blog.image}`
+                              : blog.images && blog.images[0]
+                                ? `${API_BASE}${blog.images[0]}`
+                                : ''
+                          }
                           alt={blog.title}
                           className="bl-card-img"
-                          onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                          }}
                         />
                         <CategoryBadge cat={blog.category} small />
                       </div>
@@ -200,7 +229,9 @@ function TagRow({ tags, small }) {
   return (
     <div className={`bl-tags ${small ? 'bl-tags--sm' : ''}`}>
       {tags.slice(0, 3).map((tag) => (
-        <span key={tag} className="bl-tag">#{tag}</span>
+        <span key={tag} className="bl-tag">
+          #{tag}
+        </span>
       ))}
     </div>
   );

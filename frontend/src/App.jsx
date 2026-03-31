@@ -7,6 +7,8 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ProtectedRoute from './components/ProtectedRoute';
 import Home from './pages/Home';
+import Blogs from './pages/Blogs';
+import About from './pages/About';
 import BlogDetail from './pages/BlogDetail';
 import FAQ from './pages/FAQ';
 import AdminLogin from './pages/Admin/AdminLogin';
@@ -68,6 +70,8 @@ function App() {
       <AnimatePresence mode="wait">
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={page(<Home />)} />
+          <Route path="/blogs" element={page(<Blogs />)} />
+          <Route path="/about" element={page(<About />)} />
           <Route path="/blog/:slug" element={page(<BlogDetail />)} />
           <Route path="/faq" element={page(<FAQ />)} />
           <Route path="/admin/login" element={<AdminLogin />} />

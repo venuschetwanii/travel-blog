@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 
 function LogoSVG({ scrolled }) {
@@ -24,6 +24,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const { pathname } = useLocation();
+  const navigate = useNavigate();
 
   const isHome = pathname === '/';
 
@@ -35,11 +36,23 @@ export default function Navbar() {
 
   const navLinks = [
     { label: 'Home', to: '/' },
-    { label: 'Featured', to: '/#featured', hash: true },
-    { label: 'Blog', to: '/#all-blogs', hash: true },
+    { label: 'Featured', sectionId: 'featured' },
+    { label: 'Blog', to: '/blogs' },
+    { label: 'About', to: '/about' },
     { label: 'FAQ', to: '/faq' },
     { label: 'Admin', to: '/admin' }
   ];
+
+  const goToSection = (sectionId) => {
+    if (pathname === '/') {
+      const section = document.getElementById(sectionId);
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+      }
+    }
+    navigate(`/#${sectionId}`);
+  };
 
   return (
     <>
@@ -50,9 +63,15 @@ export default function Navbar() {
 
         <ul className="navbar-links">
           {navLinks.map((link) => (
-            <li key={link.to}>
-              {link.hash ? (
-                <a href={link.to} className="navbar-link">{link.label}</a>
+            <li key={link.sectionId || link.to}>
+              {link.sectionId ? (
+                <button
+                  type="button"
+                  className="navbar-link navbar-link-btn"
+                  onClick={() => goToSection(link.sectionId)}
+                >
+                  {link.label}
+                </button>
               ) : (
                 <Link
                   to={link.to}
@@ -66,16 +85,21 @@ export default function Navbar() {
         </ul>
 
         <div className="navbar-actions">
-          <button className="navbar-search-btn" aria-label="Search" type="button">
+          <button
+            className="navbar-search-btn"
+            aria-label="Search"
+            type="button"
+            onClick={() => goToSection('all-blogs')}
+          >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
               <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="1.8" />
               <path d="M20 20l-3-3" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
             </svg>
           </button>
-          <Link to="/#all-blogs" className="navbar-cta">
+          <button type="button" className="navbar-cta navbar-cta-btn" onClick={() => goToSection('all-blogs')}>
             Write for Us
             <span className="navbar-cta-arrow">↗</span>
-          </Link>
+          </button>
         </div>
 
         <button
@@ -101,19 +125,22 @@ export default function Navbar() {
           >
             {navLinks.map((link, i) => (
               <motion.div
-                key={link.to}
+                key={link.sectionId || link.to}
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.06, duration: 0.4 }}
               >
-                {link.hash ? (
-                  <a
-                    href={link.to}
-                    className="mobile-link"
-                    onClick={() => setMenuOpen(false)}
+                {link.sectionId ? (
+                  <button
+                    type="button"
+                    className="mobile-link mobile-link-btn"
+                    onClick={() => {
+                      goToSection(link.sectionId);
+                      setMenuOpen(false);
+                    }}
                   >
                     {link.label}
-                  </a>
+                  </button>
                 ) : (
                   <Link
                     to={link.to}

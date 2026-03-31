@@ -41,8 +41,10 @@ export default function SearchBar({
       setOpen(false);
       return;
     }
+
     setLoading(true);
-    api.get('/api/blogs', { params: { search: debounced, limit: 5 } })
+    api
+      .get('/api/blogs', { params: { search: debounced, limit: 5 } })
       .then((res) => {
         setResults(res.data.data || []);
         setOpen(true);
@@ -54,6 +56,15 @@ export default function SearchBar({
     setOpen(false);
     onResultSelect?.(item);
     navigate(`/blog/${item.slug}`);
+  };
+
+  const handleSearchClick = () => {
+    if (!interactive) return;
+    if (results[0]) {
+      selectResult(results[0]);
+      return;
+    }
+    setOpen(Boolean(debounced.trim()));
   };
 
   return (
@@ -73,7 +84,9 @@ export default function SearchBar({
           }}
           placeholder={placeholder}
         />
-        <button type="button">Search →</button>
+        <button type="button" onClick={handleSearchClick}>
+          Search →
+        </button>
       </div>
 
       <AnimatePresence>
@@ -90,18 +103,19 @@ export default function SearchBar({
             {!loading && results.length === 0 ? (
               <p className="search-empty">No adventures found for "{debounced}"...</p>
             ) : null}
-            {!loading && results.map((item) => {
-              const cover = (Array.isArray(item.images) && item.images[0]) || item.image;
-              return (
-                <button key={item.id} type="button" className="search-result" onClick={() => selectResult(item)}>
-                  {cover ? <img src={`${API_BASE}${cover}`} alt={item.title} /> : <span className="dot" />}
-                  <div>
-                    <strong>{item.title}</strong>
-                    <small>{item.category}</small>
-                  </div>
-                </button>
-              );
-            })}
+            {!loading &&
+              results.map((item) => {
+                const cover = (Array.isArray(item.images) && item.images[0]) || item.image;
+                return (
+                  <button key={item.id} type="button" className="search-result" onClick={() => selectResult(item)}>
+                    {cover ? <img src={`${API_BASE}${cover}`} alt={item.title} /> : <span className="dot" />}
+                    <div>
+                      <strong>{item.title}</strong>
+                      <small>{item.category}</small>
+                    </div>
+                  </button>
+                );
+              })}
           </motion.div>
         )}
       </AnimatePresence>

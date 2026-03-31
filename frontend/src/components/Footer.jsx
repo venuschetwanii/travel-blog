@@ -1,7 +1,37 @@
 import React, { useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+
+const footerLinks = [
+  { label: 'Home', to: '/' },
+  { label: 'Journal', sectionId: 'all-blogs' },
+  { label: 'Featured', sectionId: 'featured' },
+  { label: 'About', to: '/about' },
+  { label: 'FAQ', to: '/faq' },
+  { label: 'Admin', to: '/admin' }
+];
+
+const socials = [
+  { label: 'Twitter', href: 'https://x.com' },
+  { label: 'Instagram', href: 'https://www.instagram.com' },
+  { label: 'YouTube', href: 'https://www.youtube.com' }
+];
 
 export default function Footer() {
   const [email, setEmail] = useState('');
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+
+  const goToSection = (sectionId) => {
+    if (pathname === '/') {
+      const section = document.getElementById(sectionId);
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+      }
+    }
+    navigate(`/#${sectionId}`);
+  };
+
   return (
     <footer className="footer">
       <div className="footer-inner">
@@ -17,8 +47,10 @@ export default function Footer() {
             Travel stories and practical itineraries for explorers who spend wisely.
           </p>
           <div className="footer-socials">
-            {['Twitter', 'Instagram', 'YouTube'].map((s) => (
-              <a key={s} href="/" className="footer-social" aria-label={s}>{s[0]}</a>
+            {socials.map((s) => (
+              <a key={s.label} href={s.href} className="footer-social" aria-label={s.label} target="_blank" rel="noreferrer">
+                {s.label[0]}
+              </a>
             ))}
           </div>
         </div>
@@ -42,8 +74,21 @@ export default function Footer() {
         <div className="footer-links-col">
           <p className="footer-col-title">Navigate</p>
           <nav className="footer-links">
-            {['Home', 'Journal', 'Featured', 'FAQ', 'Admin'].map((l) => (
-              <a key={l} href="/" className="footer-link">{l}</a>
+            {footerLinks.map((item) => (
+              item.sectionId ? (
+                <button
+                  key={item.label}
+                  type="button"
+                  className="footer-link footer-link-btn"
+                  onClick={() => goToSection(item.sectionId)}
+                >
+                  {item.label}
+                </button>
+              ) : (
+                <Link key={item.label} to={item.to} className="footer-link">
+                  {item.label}
+                </Link>
+              )
             ))}
           </nav>
         </div>

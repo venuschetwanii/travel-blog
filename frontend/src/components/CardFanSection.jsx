@@ -1,36 +1,52 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_BASE } from '../api';
 
 const FALLBACK_CARDS = [
-  { image: 'https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=600&q=80', destination: 'Jaipur, India', category: 'Asia', budget: '$12/day' },
-  { image: 'https://images.unsplash.com/photo-1539635278303-d4002c07eae3?w=600&q=80', destination: 'Ubud, Bali', category: 'Asia', budget: '$18/day' },
-  { image: 'https://images.unsplash.com/photo-1480796927426-f609979314bd?w=600&q=80', destination: 'Tokyo, Japan', category: 'Asia', budget: '$45/day' },
-  { image: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&q=80', destination: 'Paris, France', category: 'Europe', budget: '$60/day' },
-  { image: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?w=600&q=80', destination: 'Santorini, Greece', category: 'Europe', budget: '$55/day' }
+  { image: 'https://i.ibb.co/Nd3Sty9z/IMG-4964.jpg', destination: 'Jaipur, India', category: 'Asia', budget: '$12/day' },
+  { image: 'https://i.ibb.co/Gv6gmMn6/IMG-4963.jpg', destination: 'Rishikesh, India', category: 'Adventure', budget: '$16/day' },
+  { image: 'https://i.ibb.co/0jcK6t4f/IMG-4962.jpg', destination: 'Igatpuri, India', category: 'Mountains', budget: '$14/day' },
+  { image: 'https://i.ibb.co/tpZT9hyP/IMG-4958.jpg', destination: 'Varanasi, India', category: 'City', budget: '$13/day' },
+  { image: 'https://i.ibb.co/bcyWtRG/IMG-4960.jpg', destination: 'Goa, India', category: 'Beach', budget: '$22/day' },
+  { image: 'https://i.ibb.co/MyTLczQq/IMG-4959.jpg', destination: 'Manali, India', category: 'Mountains', budget: '$20/day' },
+  { image: 'https://i.ibb.co/zhDTN0Sf/IMG-4965.jpg', destination: 'Udaipur, India', category: 'City', budget: '$18/day' }
 ];
 
 export default function CardFanSection() {
   const [cards, setCards] = useState(FALLBACK_CARDS);
   const [hovered, setHovered] = useState(false);
   const [activeCard, setActiveCard] = useState(null);
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.2 });
 
+  const goToSection = (sectionId) => {
+    if (pathname === '/') {
+      const section = document.getElementById(sectionId);
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+      }
+    }
+    navigate(`/#${sectionId}`);
+  };
+
   useEffect(() => {
-    axios.get(`${API_BASE}/api/blogs?limit=5&published=true`)
+    axios.get(`${API_BASE}/api/blogs?limit=7&published=true`)
       .then((res) => {
         const blogs = res.data?.blogs || res.data?.data || res.data || [];
         if (Array.isArray(blogs) && blogs.length >= 3) {
-          const mapped = blogs.slice(0, 5).map((b, i) => ({
+          const mapped = blogs.slice(0, 7).map((b, i) => ({
             image: b?.image ? `${API_BASE}${b.image}` : FALLBACK_CARDS[i % FALLBACK_CARDS.length].image,
             destination: b?.title || FALLBACK_CARDS[i % FALLBACK_CARDS.length].destination,
             category: b?.category || FALLBACK_CARDS[i % FALLBACK_CARDS.length].category,
             budget: (Array.isArray(b?.tags) && b.tags[0]) || 'Budget Travel',
             slug: b?.slug
           }));
-          while (mapped.length < 5) mapped.push(FALLBACK_CARDS[mapped.length]);
+          while (mapped.length < 7) mapped.push(FALLBACK_CARDS[mapped.length]);
           setCards(mapped);
         }
       })
@@ -60,7 +76,7 @@ export default function CardFanSection() {
   };
 
   return (
-    <section className="fan-section" ref={ref}>
+    <section className="fan-section" ref={ref} id="featured">
       <div className="fan-wave-top">
         <svg viewBox="0 0 1440 56" preserveAspectRatio="none">
           <path d="M0,28 C480,56 960,0 1440,28 L1440,0 L0,0 Z" fill="var(--cream)" />
@@ -97,7 +113,7 @@ export default function CardFanSection() {
             className="fan-cta"
             whileHover={{ scale: 1.04, y: -2 }}
             whileTap={{ scale: 0.97 }}
-            onClick={() => { window.location.href = '/#all-blogs'; }}
+            onClick={() => goToSection('all-blogs')}
             type="button"
           >
             Explore All Guides
@@ -146,7 +162,7 @@ export default function CardFanSection() {
                   }}
                   onMouseEnter={() => setActiveCard(i)}
                   onMouseLeave={() => setActiveCard(null)}
-                  onClick={() => card.slug && (window.location.href = `/blog/${card.slug}`)}
+                  onClick={() => card.slug && navigate(`/blog/${card.slug}`)}
                 >
                   <div className="fan-card-img-wrap">
                     <img
@@ -154,6 +170,7 @@ export default function CardFanSection() {
                       alt={card.destination}
                       className="fan-card-img"
                       onError={(e) => {
+                        e.currentTarget.onerror = null;
                         e.currentTarget.src = FALLBACK_CARDS[i % FALLBACK_CARDS.length].image;
                       }}
                     />
